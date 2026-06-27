@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "description": "Marketing and docs site for Agent Relay.",
+  "packageManager": "pnpm@11.9.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
