@@ -1,107 +1,174 @@
 ---
 layout: ../../layouts/MethodDoc.astro
 title: Prompt Craft
-description: A step-by-step way to climb from a prompt to a handoff-ready task record.
+description: The prompting techniques that move the output, and copy-paste templates for handoffs and saving state.
 ---
 
-# Prompt Craft: The Climb To Work
+# Prompt Craft
 
-A prompt asks for an answer. Work mode gives a job that survives the handoff. This is the climb between them — and how to make it, one rung at a time, with your own work.
+Good prompting is not one trick. It is a small stack of reliable techniques, applied in roughly the order below. Anthropic's own guidance lands on the same moves: give the model a role, be clear, add context, show examples, structure the prompt, name the output format, and let it think.
 
-Most advice treats prompting as a single skill you get better at. It is not. It is a climb. Each rung adds the one thing the rung below could not survive without. At each rung there is a question you ask yourself, and the answer is what you add before you climb higher.
+For relay work you stack those moves into one reusable thing: a **handoff prompt** that another person or agent can pick up. The templates at the bottom are that stack, ready to copy.
 
-We use one example the whole way up: a follow-up email after a client call.
+## The Techniques That Move The Output
 
-## Rung 1 · Ask
+### 1. Give it a role
 
-Get an answer inside one chat.
-
-```text
-Write a follow-up email to the client.
-```
-
-> **Do this:** Write the plainest version of what you want. If you will read the result and use it yourself, stop here — you do not need to climb.
-
-This fails the moment the email has to be grounded in something or handed to someone else. The model fills the gaps with guesses.
-
-## Rung 2 · Frame
-
-Attach the source and context, so the answer is grounded in real material instead of invented.
+Set a role in the system prompt. It focuses tone and behavior, and even one sentence changes the result.
 
 ```text
-Using the client-call transcript and the decision summary, write a follow-up email to the client.
+You are a careful operations assistant. You do work that another
+person or agent will pick up, so you leave a clear trail and never guess.
 ```
 
-> **Do this:** Ask yourself — *what did the model need to read to get this right?* Attach or paste that source. Name the decisions already made. If you would have to explain background out loud, write it down instead.
+This is the move most people skip, and it is the one that makes everything after it land.
 
-Now the email reflects what was actually said. But the model still has full freedom — it may promise things you did not authorize.
+### 2. Be clear and direct
 
-## Rung 3 · Bound
+Treat the model like a brilliant new hire with no context on your norms. State the objective, the format, and the constraints in plain steps. The golden rule: if a colleague with no context would be confused by your prompt, so will the model.
 
-Add what the actor may do and where it must stop, so the work is safe to run without you watching.
+### 3. Give it context
+
+Explain *why*. A reason lets the model generalize instead of guessing.
 
 ```text
-Using the client-call transcript and the decision summary, draft the follow-up email. Do not overstate the promise we made. Flag anything that needs my judgment. Stop before sending.
+This email goes to a client we just closed, so the tone must be warm
+but not over-promise — they will hold us to anything we say.
 ```
 
-> **Do this:** Ask yourself — *what could go wrong if no one was watching?* Write three things: what the actor may do, what it must not do, and the exact point where it must stop and hand back.
+### 4. Show examples
 
-This is the rung most people skip, and it is the one that makes delegation safe.
-
-## Rung 4 · Hand Off
-
-Add who acts next, what proves the work is done, and a status the next actor can read — so the work can leave the chat entirely.
+Examples are the most reliable way to steer format, tone, and structure. Use three to five, make them relevant and diverse, and wrap them so they read as examples, not instructions.
 
 ```text
-Outcome: a client-ready follow-up email, not yet sent.
-Source: client-call transcript, decision summary.
-Allowed: draft the email, flag open questions.
-Stop: before sending; before promising anything beyond the decision summary.
-Done: draft saved, judgment flags listed, receipt left.
-Next actor: Jeff, for review and send.
+<examples>
+  <example>Input: ... → Output: ...</example>
+  <example>Input: ... → Output: ...</example>
+</examples>
 ```
 
-> **Do this:** Ask yourself — *if I disappeared right now, could the next actor finish from this alone?* Fill every line below. A blank line is a question someone will have to ask you later.
+### 5. Structure with XML tags
 
-This is no longer a prompt. It is a task record. It can move to another agent or another person with nothing spoken.
-
-## Climb Your Own Prompt In Four Passes
-
-Take a real prompt you are about to send. Make four passes over it.
-
-1. **Write it plainly (Ask).** Say what you want in one line. Decide: does this answer stay with me? If yes, send it — you are done.
-2. **Ground it (Frame).** List what the model must read to be right. Paste or link each one into the prompt.
-3. **Fence it (Bound).** Add the three boundaries: allowed, not allowed, stop point.
-4. **Hand it off (Hand off).** Fill the template below. If you can fill every line, the work can leave the chat.
-
-Stop at the pass that matches how far the work has to travel. You are not aiming for rung four every time — you are aiming for the lowest rung the work can survive.
-
-## The Copy-Paste Handoff Template
-
-Keep this near your keyboard. To climb a prompt to the top, fill it in:
+When a prompt mixes instructions, context, sources, and inputs, tag each part. It stops the model from confusing your source material for your instructions.
 
 ```text
-Outcome:      (the finished result, in one sentence)
-Source:       (everything the actor must read — attached or linked)
-Allowed:      (what the actor may do)
-Stop:         (the point it must not pass without you)
-Done:         (the proof that it is finished)
-Next actor:   (the named human or agent who acts next)
+<instructions>...</instructions>
+<context>...</context>
+<sources>...</sources>
 ```
 
-If a line is blank, that is the gap. Fill it before you hand off, not after someone asks.
+### 6. Name the output format
 
-## How High To Climb
+Do not hope for the right shape — specify it. Describe the format, or show it with a tagged skeleton the model fills in. Matching your prompt's style to the output you want helps too.
 
-Climb only as high as the work has to travel.
+### 7. Let it think
 
-- The answer stays with you → **Ask** is enough.
-- The answer must be correct against real material → climb to **Frame**.
-- The work runs without you watching → climb to **Bound**.
-- The work leaves the chat for another actor → climb to **Hand off**.
+For anything with reasoning, tell the model to work step by step before the final answer. It thinks, then commits — instead of committing, then justifying.
 
-The mistake is not climbing too high. The mistake is sending rung-one work on a rung-four journey, and then becoming the hallway it travels through.
+```text
+Think step by step before you act. Then do the work.
+```
+
+## Stacking The Moves Into A Handoff
+
+A relay handoff is just these techniques stacked around the [seven-part task record](../relay-loop-audit/):
+
+- a **role** that says "you leave a trail,"
+- a **clear** outcome,
+- the **context** and **sources** the next actor needs,
+- the **rules** and stop point,
+- and a named **output format** — the receipt — so state is saved on the way out.
+
+Tag the parts so nothing is mistaken for an instruction, and you have a prompt that can leave the chat.
+
+## Templates
+
+Copy these. Replace the angle-bracket placeholders.
+
+### The handoff prompt
+
+Give this to an agent to **do** a task and hand it off cleanly.
+
+```text
+You are a careful operations assistant. You do work another actor will
+pick up, so you leave a clear trail and never guess.
+
+<task>
+Outcome: <the finished result, in one sentence>
+</task>
+
+<context>
+<what has been decided so far, and why it matters>
+</context>
+
+<sources>
+<paste or link every input the work needs — not "see the chat">
+</sources>
+
+<rules>
+- You may: <allowed actions>
+- You must not: <forbidden actions>
+- Stop and hand back when: <the stop rule / human gate>
+</rules>
+
+Think step by step before you act. Then do the work.
+
+When you stop, output a receipt in exactly this format:
+<receipt>
+Status: working | needs-input | review | done
+What I did:
+Sources I used:
+What I did NOT do:
+What I need next:
+Next actor:
+</receipt>
+```
+
+### The save-state prompt
+
+Run this to turn a finished or paused chat into **saved state** the next actor can resume from. It adds no new work.
+
+```text
+You are closing out a unit of work so the next actor can resume without
+reading this chat. Summarize the current state as a receipt only — do not
+start anything new.
+
+<receipt>
+Status: working | needs-input | review | done | parked
+What changed:
+Sources used:
+Decisions made:
+Open questions / blockers:
+Next actor:
+</receipt>
+```
+
+### The resume prompt
+
+Run this to **pick up** work from a saved receipt.
+
+```text
+You are continuing work another actor started. The receipt below is your
+only context — do not ask for the original chat.
+
+<receipt>
+<paste the prior receipt>
+</receipt>
+
+<task>
+Outcome: <the same or refined outcome>
+</task>
+
+Continue from where the receipt leaves off. Think step by step, do the
+work, then leave an updated receipt in the same format.
+```
+
+## How Much To Use
+
+Use only the moves the task needs. A throwaway answer needs clarity and nothing else. A job that has to leave the chat for another actor needs the whole stack — role, sources, rules, and a receipt format — because every move you skip is a question the next actor has to come back and ask you.
 
 ---
+
+Source: [Anthropic — Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 Next: [The Relay Loop Audit](../relay-loop-audit/) · [The 30-Minute Relay](../thirty-minute-relay/)
