@@ -1,0 +1,59 @@
+---
+import Base from "../layouts/Base.astro";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Base title="The Agent Relay method" description="The relay method: the loop audit, prompt craft, and the 30-minute relay.">
+  <section>
+    <div class="prose">
+      <h1>The method</h1>
+      <p class="muted">
+        Agent Relay is built from a few plain beliefs: the human should not be
+        the hallway, state belongs somewhere inspectable, a task is not a
+        prompt, and receipts beat vibes. Three guides put that to work.
+      </p>
+
+      <h2><a href={`${base}/method/relay-loop-audit/`}>01 · The Relay Loop Audit</a></h2>
+      <p>
+        A handoff is ready to leave the chat when work can move to the next
+        actor with no spoken explanation from you. The audit is the one pass
+        that checks it — nine questions, each mapped to a part of the task
+        record. Any “no” is the gap to fix before you hand off.
+      </p>
+
+      <h2><a href={`${base}/method/prompt-craft/`}>02 · Prompt Craft</a></h2>
+      <p>
+        Prompting is not one skill you sharpen — it's a climb. Ask gets an
+        answer. Frame grounds it in real source. Bound makes it safe to run
+        unattended. Hand off lets the work leave the chat entirely. Climb only
+        as high as the work has to travel.
+      </p>
+
+      <h2><a href={`${base}/method/thirty-minute-relay/`}>03 · The 30-Minute Relay</a></h2>
+      <p>
+        You don't need a project to start a relay. You need one real handoff
+        and thirty minutes — six five-minute blocks from a named workspace to a
+        live dashboard. If it doesn't fit in thirty minutes, the first task was
+        too big. Shrink the task, not the method.
+      </p>
+
+      <h2>Start now</h2>
+      <p>
+        The kit — CLI, templates, adapters, and protocol — is free and open.
+        Grab it and run your first relay:
+      </p>
+      <p>
+        <a href="https://github.com/The-Little-AI-Company/open-work-relay">Get the kit on GitHub &rarr;</a>
+      </p>
+      <p>Two short commands, no flags:</p>
+      <div class="terminal" style="max-width:none">
+        <div class="terminal-bar">
+          <span></span><span></span><span></span>
+          <span class="label">relay</span>
+        </div>
+        <pre><code><span class="c-prompt">$</span> <span class="c-cmd">relay init "Client Ops Relay"</span>
+<span class="c-prompt">$</span> <span class="c-cmd">relay dashboard</span></code></pre>
+      </div>
+    </div>
+  </section>
+</Base>

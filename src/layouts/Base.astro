@@ -1,0 +1,55 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Agent Relay — stop being the hallway",
+  description = "Agent Relay moves work between people and AI agents without losing the source, limits, status, or receipt. Free and open source.",
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <header class="site-nav">
+      <a class="brand" href={`${base}/`}>
+        <span class="brand-dot"></span>
+        Agent Relay
+      </a>
+      <nav>
+        <a href={`${base}/method/`}>Method</a>
+        <a href="https://github.com/The-Little-AI-Company/open-work-relay" rel="noopener">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>Agent Relay — the human should not be the hallway.</p>
+        <p class="muted">
+          MIT licensed. Free and open. Copy it, teach it, remix it.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

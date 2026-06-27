@@ -1,0 +1,20 @@
+---
+import Base from "./Base.astro";
+
+const { frontmatter } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Base
+  title={`${frontmatter.title} — Agent Relay`}
+  description={frontmatter.description}
+>
+  <section>
+    <div class="prose">
+      <p class="doc-back">
+        <a href={`${base}/method/`}>&larr; The method</a>
+      </p>
+      <slot />
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,171 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroShader from "../components/HeroShader.astro";
+
+const KIT = "https://github.com/The-Little-AI-Company/open-work-relay";
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const sevenParts = [
+  "Outcome",
+  "Owner / next actor",
+  "Source material",
+  "Context / decisions so far",
+  "Allowed actions",
+  "Stop rules / human gates",
+  "Done evidence / receipt",
+];
+
+const statuses = [
+  { name: "ready", cls: "go" },
+  { name: "claimed", cls: "" },
+  { name: "working", cls: "" },
+  { name: "needs-input", cls: "attn" },
+  { name: "review", cls: "attn" },
+  { name: "done", cls: "go" },
+  { name: "parked", cls: "" },
+];
+
+const guides = [
+  {
+    num: "01",
+    title: "The Relay Loop Audit",
+    body: "Nine questions that decide whether a handoff can leave the chat. Any “no” is the gap to fix before you hand off.",
+    href: `${base}/method/relay-loop-audit/`,
+  },
+  {
+    num: "02",
+    title: "Prompt Craft",
+    body: "The climb from a prompt to a handoff-ready task: Ask → Frame → Bound → Hand off. One example, every rung.",
+    href: `${base}/method/prompt-craft/`,
+  },
+  {
+    num: "03",
+    title: "The 30-Minute Relay",
+    body: "Six five-minute blocks from zero to a running loop on one real task. If it doesn’t fit in 30 minutes, the task was too big.",
+    href: `${base}/method/thirty-minute-relay/`,
+  },
+];
+---
+
+<Base>
+  <!-- HERO -->
+  <section class="hero">
+    <HeroShader />
+    <div class="wrap">
+      <p class="eyebrow">Free &amp; open source · the handoff layer for AI work</p>
+      <h1>Stop being the hallway.</h1>
+      <p class="lede">
+        Claude drafts. Codex edits. ChatGPT reviews. A teammate owns the call.
+        The weak point is never the model — it's the handoff. Agent Relay turns
+        every handoff into a visible task record that carries the source, the
+        limits, the status, and the receipt.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href={KIT} rel="noopener">Get the kit</a>
+        <a class="btn btn-ghost" href={`${base}/method/`}>Read the method</a>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span></span><span></span><span></span>
+          <span class="label">relay</span>
+        </div>
+        <pre><code><span class="c-comment"># two short commands, no flags</span>
+<span class="c-prompt">$</span> <span class="c-cmd">relay init "Client Ops Relay"</span>
+<span class="c-out">Created relay workspace: Client Ops Relay</span>
+<span class="c-out">Next: relay dashboard</span>
+<span class="c-prompt">$</span> <span class="c-cmd">relay dashboard</span>
+<span class="c-out">Agent Relay dashboard: http://127.0.0.1:8787/</span></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section>
+    <div class="wrap">
+      <p class="section-label">Prompt mode vs work mode</p>
+      <h2 class="section-title">A prompt asks for an answer. Work mode gives a job that survives the handoff.</h2>
+      <p class="section-intro">
+        Prompt mode is fine until the answer has to move to another person,
+        agent, or system. Work mode carries everything the next actor needs.
+      </p>
+      <div class="split">
+        <div class="card dim">
+          <h3># prompt mode</h3>
+          <pre>Write a follow-up email.</pre>
+        </div>
+        <div class="card bright">
+          <h3># work mode</h3>
+          <pre>Use the client-call transcript and the
+decision summary. Draft the follow-up,
+do not overstate the promise, flag what
+needs my judgment, leave a receipt, and
+stop before sending.</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEVEN-PART RECORD -->
+  <section>
+    <div class="wrap">
+      <p class="section-label">The task record</p>
+      <h2 class="section-title">Seven parts travel with every job.</h2>
+      <p class="section-intro">
+        The next person or agent should resume from the record — not from a
+        giant chat history. These seven parts are the whole contract.
+      </p>
+      <ol class="steps">
+        {sevenParts.map((part) => <li>{part}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <!-- STATE MACHINE -->
+  <section>
+    <div class="wrap">
+      <p class="section-label">The state machine</p>
+      <h2 class="section-title">Work has a status anyone can read. Every change leaves a receipt.</h2>
+      <p class="section-intro">
+        Agents claim work, move it through statuses, and route anything
+        ambiguous to <code>needs-input</code>. Receipts beat vibes.
+      </p>
+      <div class="chips">
+        {statuses.map((s) => <span class={`chip ${s.cls}`}>{s.name}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD GUIDES -->
+  <section>
+    <div class="wrap">
+      <p class="section-label">The method, in our own framing</p>
+      <h2 class="section-title">Three guides take you from idea to running loop.</h2>
+      <div class="guide-grid">
+        {guides.map((g) => (
+          <a class="guide" href={g.href} rel="noopener">
+            <span class="num">{g.num}</span>
+            <h3>{g.title}</h3>
+            <p>{g.body}</p>
+            <span class="more">Read &rarr;</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- OPEN BANNER -->
+  <section class="banner">
+    <div class="wrap">
+      <h2>The core is free, and it stays free.</h2>
+      <p>
+        Useful AI knowledge should travel. The spec, templates, adapters, CLI,
+        and local dashboard are MIT licensed. Copy it, teach it, remix it.
+      </p>
+      <div class="cta-row" style="justify-content:center">
+        <a class="btn btn-primary" href={KIT} rel="noopener">Star it on GitHub</a>
+        <a class="btn btn-ghost" href={`${base}/method/`}>See the method</a>
+      </div>
+    </div>
+  </section>
+</Base>

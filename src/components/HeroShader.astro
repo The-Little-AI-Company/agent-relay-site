@@ -1,0 +1,186 @@
+---
+// Animated WebGL background: geometric shapes oozing together like a lava lamp.
+// No dependencies. Falls back to a static frame when prefers-reduced-motion.
+---
+
+<div class="hero-bg" aria-hidden="true">
+  <canvas id="hero-shader"></canvas>
+  <div class="hero-scrim"></div>
+</div>
+
+<style>
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  #hero-shader {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* keep the headline readable: ink wash on the left + bottom, ooze breathes on the right */
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        90deg,
+        var(--ink) 0%,
+        color-mix(in srgb, var(--ink) 72%, transparent) 40%,
+        transparent 74%
+      ),
+      linear-gradient(0deg, var(--ink) 0%, transparent 34%);
+  }
+</style>
+
+<script>
+  const canvas = document.getElementById("hero-shader");
+  if (canvas && canvas.getContext) {
+    const gl =
+      canvas.getContext("webgl", { antialias: true, alpha: false }) ||
+      canvas.getContext("experimental-webgl");
+
+    if (gl) {
+      const vert = `
+        attribute vec2 a_pos;
+        void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
+      `;
+
+      const frag = `
+        precision highp float;
+        uniform vec2 u_res;
+        uniform float u_time;
+
+        float smin(float a, float b, float k){
+          float h = clamp(0.5 + 0.5*(b-a)/k, 0.0, 1.0);
+          return mix(b, a, h) - k*h*(1.0-h);
+        }
+        float sdCircle(vec2 p, float r){ return length(p) - r; }
+        float sdHex(vec2 p, float r){
+          const vec3 k = vec3(-0.866025404, 0.5, 0.577350269);
+          p = abs(p);
+          p -= 2.0*min(dot(k.xy, p), 0.0)*k.xy;
+          p -= vec2(clamp(p.x, -k.z*r, k.z*r), r);
+          return length(p)*sign(p.y);
+        }
+        float sdTri(vec2 p, float r){
+          const float k = 1.732050808;
+          p.x = abs(p.x) - r;
+          p.y = p.y + r/k;
+          if (p.x + k*p.y > 0.0) p = vec2(p.x - k*p.y, -k*p.x - p.y)/2.0;
+          p.x -= clamp(p.x, -2.0*r, 0.0);
+          return -length(p)*sign(p.y);
+        }
+        mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
+
+        void main(){
+          vec2 uv = (gl_FragCoord.xy - 0.5*u_res) / min(u_res.x, u_res.y);
+          float t = u_time*0.25;
+          float k = 0.30;          // tighter blend: shapes keep their identity as they merge
+          float d = 1e9;
+          float cx = 0.6;          // push the mass right, clear of the headline
+
+          d = smin(d, sdCircle(uv - vec2(cx + sin(t*0.9)*0.30, cos(t*0.7)*0.40), 0.34), k);
+          d = smin(d, sdCircle(uv - vec2(cx + cos(t*0.6)*0.34 + 0.18, sin(t*1.1)*0.46 + 0.06), 0.26), k);
+          d = smin(d, sdHex((uv - vec2(cx + sin(t*1.2 + 2.0)*0.30, cos(t*0.5 + 1.0)*0.50 - 0.12))*rot(t*0.5), 0.24), k);
+          d = smin(d, sdTri((uv - vec2(cx + cos(t*0.8 + 1.5)*0.34 + 0.10, sin(t*0.9 + 0.5)*0.40))*rot(-t*0.45), 0.26), k);
+          d = smin(d, sdHex((uv - vec2(cx + sin(t*0.7 + 3.0)*0.26 + 0.22, cos(t*0.8 + 2.0)*0.44))*rot(t*0.3 + 1.0), 0.20), k);
+
+          vec3 ink   = vec3(0.039, 0.047, 0.063);
+          vec3 green = vec3(0.29, 0.87, 0.50);
+          vec3 cyan  = vec3(0.22, 0.74, 0.97);
+
+          float inside = smoothstep(0.05, -0.06, d);     // crisper mass
+          float edge   = smoothstep(0.06, 0.0, abs(d));   // tight, bright rim
+          float core   = smoothstep(-0.05, -0.24, d);     // glowing center
+          float grad   = 0.5 + 0.5*sin(d*7.0 - u_time*0.5 + uv.x*2.2);
+          vec3 lava = mix(green, cyan, grad);
+
+          vec3 col = ink;
+          col = mix(col, lava*0.7, inside);
+          col += lava * edge * 0.55;
+          col += green * core * 0.18;
+          col *= 1.0 - 0.22*length(uv*vec2(0.5, 1.0));
+
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `;
+
+      const compile = (type, src) => {
+        const sh = gl.createShader(type);
+        gl.shaderSource(sh, src);
+        gl.compileShader(sh);
+        return sh;
+      };
+
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, vert));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, frag));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const aPos = gl.getAttribLocation(prog, "a_pos");
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      const uRes = gl.getUniformLocation(prog, "u_res");
+      const uTime = gl.getUniformLocation(prog, "u_time");
+
+      const resize = () => {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.floor(canvas.clientWidth * dpr);
+        const h = Math.floor(canvas.clientHeight * dpr);
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+          gl.viewport(0, 0, w, h);
+        }
+        gl.uniform2f(uRes, w, h);
+      };
+
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let raf = 0;
+      let visible = true;
+
+      const draw = (ms) => {
+        resize();
+        gl.uniform1f(uTime, ms * 0.001);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        raf = requestAnimationFrame(draw);
+      };
+
+      const start = () => { if (!raf) raf = requestAnimationFrame(draw); };
+      const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+
+      window.addEventListener("resize", resize);
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stop();
+        else if (visible && !reduced) start();
+      });
+
+      // pause when the hero scrolls out of view
+      const io = new IntersectionObserver((entries) => {
+        visible = entries[0].isIntersecting;
+        if (visible && !reduced) start();
+        else stop();
+      }, { threshold: 0 });
+      io.observe(canvas);
+
+      resize();
+      if (reduced) {
+        gl.uniform1f(uTime, 8.0); // a single pleasant static frame
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      } else {
+        start();
+      }
+    }
+  }
+</script>

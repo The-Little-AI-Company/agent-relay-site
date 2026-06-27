@@ -1,0 +1,15 @@
+{
+  "name": "agent-relay-site",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Marketing and docs site for Agent Relay.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^7.0.3"
+  }
+}
