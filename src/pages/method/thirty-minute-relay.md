@@ -14,9 +14,17 @@ The point is not speed for its own sake. The point is that if a relay cannot be 
 
 ## The Six Blocks
 
-### 0–5 · Create the workspace
+### 0-5 · Create the workspace
 
-Pick one real area of work and name it.
+Install the kit from GitHub if `relay` is not on your machine yet.
+
+```bash
+git clone https://github.com/The-Little-AI-Company/open-work-relay
+cd open-work-relay
+npm install -g .
+```
+
+Then pick one real area of work and name it.
 
 ```bash
 relay init "Client Ops Relay"
@@ -24,27 +32,27 @@ relay init "Client Ops Relay"
 
 You now have `tasks/`, `receipts/`, and `done/`. That is the whole system. `init` remembers this relay, so the rest of the commands need no `--root`.
 
-### 5–10 · Run the smoke test
+### 5-10 · Run the smoke test
 
 Copy the example task and let an agent run it end to end. This proves the loop works before you trust it with real work. The agent should claim it, do it, and leave a receipt — with no chat context from you.
 
-### 10–15 · Write one real task
+### 10-15 · Write one real task
 
 Take one handoff you would normally explain out loud and write it as a task. Use the seven-part record. Run the [Relay Loop Audit](../relay-loop-audit/) over it.
 
 One task. Not your backlog. The smallest real thing that has to move from you to someone else.
 
-### 15–20 · Hand it off
+### 15-20 · Hand it off
 
 Give the task to the agent or person who acts next. Do not narrate it. Do not stay in the loop to explain. If they need you to talk them through it, the task is not done — go back to block three.
 
-### 20–25 · Read the receipt
+### 20-25 · Read the receipt
 
 When the actor stops, read the receipt, not the chat. It should tell you what changed, what sources were used, why they stopped, and who acts next.
 
 If you cannot resume from the receipt alone, the receipt is missing proof. That is the thing to fix, and it is more important than the task itself.
 
-### 25–30 · Open the dashboard
+### 25-30 · Open the dashboard
 
 ```bash
 relay dashboard

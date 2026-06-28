@@ -45,13 +45,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       <p>
         <a href="https://github.com/The-Little-AI-Company/open-work-relay">Get the kit on GitHub &rarr;</a>
       </p>
-      <p>Two short commands, no flags:</p>
+      <p>Install from GitHub, then start a relay:</p>
       <div class="terminal" style="max-width:none">
         <div class="terminal-bar">
           <span></span><span></span><span></span>
           <span class="label">relay</span>
         </div>
-        <pre data-copy={'relay init "Client Ops Relay"\nrelay dashboard'}><code><span class="c-prompt">$</span> <span class="c-cmd">relay init "Client Ops Relay"</span>
+        <pre data-copy={'git clone https://github.com/The-Little-AI-Company/open-work-relay\ncd open-work-relay\nnpm install -g .\nrelay init "Client Ops Relay"\nrelay dashboard'}><code><span class="c-prompt">$</span> <span class="c-cmd">git clone https://github.com/The-Little-AI-Company/open-work-relay</span>
+<span class="c-prompt">$</span> <span class="c-cmd">cd open-work-relay</span>
+<span class="c-prompt">$</span> <span class="c-cmd">npm install -g .</span>
+<span class="c-prompt">$</span> <span class="c-cmd">relay init "Client Ops Relay"</span>
 <span class="c-prompt">$</span> <span class="c-cmd">relay dashboard</span></code></pre>
       </div>
     </div>
