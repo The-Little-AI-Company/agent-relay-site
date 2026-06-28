@@ -1,0 +1,23 @@
+# Agent Relay
+
+> Agent Relay is a free and open source handoff layer for AI work. It helps people move work between humans, AI agents, and systems without losing the source, limits, status, or receipt.
+
+## Canonical Site
+
+- [Agent Relay site](https://the-little-ai-company.github.io/agent-relay-site/): Marketing and method site for Agent Relay.
+- [The method](https://the-little-ai-company.github.io/agent-relay-site/method/): Overview of the relay method and its core guides.
+
+## Method Guides
+
+- [The Relay Loop Audit](https://the-little-ai-company.github.io/agent-relay-site/method/relay-loop-audit/): Nine checks for whether a handoff can leave the chat.
+- [Prompt Craft](https://the-little-ai-company.github.io/agent-relay-site/method/prompt-craft/): The progression from prompt to handoff-ready task.
+- [The 30-Minute Relay](https://the-little-ai-company.github.io/agent-relay-site/method/thirty-minute-relay/): A six-block setup flow for a first relay.
+
+## Source Code
+
+- [Agent Relay kit](https://github.com/The-Little-AI-Company/open-work-relay): CLI, templates, adapters, protocol, and local dashboard.
+- [Agent Relay website](https://github.com/The-Little-AI-Company/agent-relay-site): Source for this static Astro site.
+
+## Use Notes
+
+Agent Relay is MIT licensed. The core concept is that work should travel as a task record with an outcome, owner or next actor, source material, context, allowed actions, stop rules, and done evidence.

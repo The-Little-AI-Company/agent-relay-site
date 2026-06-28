@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://the-little-ai-company.github.io/agent-relay-site/sitemap.xml
