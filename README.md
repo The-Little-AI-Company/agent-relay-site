@@ -18,12 +18,16 @@ pnpm dev
 
 ```bash
 pnpm build      # outputs static site to ./dist
+pnpm check      # builds, then verifies sitemap.xml, robots.txt, and llms.txt
 pnpm preview    # preview the production build locally
 ```
 
 ## Notes
 
 - `astro.config.mjs` — set `site` to the production URL before launch.
+- `public/sitemap.xml`, `public/robots.txt`, `public/llms.txt`, and
+  `scripts/check-seo.mjs` use the GitHub Pages project URL. Update them
+  together if `site` or `base` changes.
 - Native build scripts (`esbuild`, `sharp`) are explicitly approved in
   `pnpm-workspace.yaml`. Hosted CI runners build without extra flags; if a local
   reinstall asks to purge `node_modules`, run with `CI=true`.

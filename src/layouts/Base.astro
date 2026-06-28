@@ -11,7 +11,16 @@ const {
   description = "Agent Relay moves work between people and AI agents without losing the source, limits, status, or receipt. Free and open source.",
 } = Astro.props;
 
+const site = Astro.site ?? new URL("https://the-little-ai-company.github.io");
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const baseWithSlash = `${base}/`;
+const routePath =
+  base &&
+  (Astro.url.pathname === base || Astro.url.pathname.startsWith(baseWithSlash))
+    ? Astro.url.pathname.slice(base.length) || "/"
+  : Astro.url.pathname;
+const canonicalPath = `${base}${routePath === "/" ? "/" : routePath}`;
+const canonicalUrl = new URL(canonicalPath, site).toString();
 ---
 
 <!doctype html>
@@ -19,12 +28,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+    <link rel="canonical" href={canonicalUrl} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
