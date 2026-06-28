@@ -5,6 +5,14 @@ import HeroShader from "../components/HeroShader.astro";
 const KIT = "https://github.com/The-Little-AI-Company/open-work-relay";
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
+// Real install path (the kit is install-from-GitHub; not on npm yet).
+const installCmds = [
+  "git clone https://github.com/The-Little-AI-Company/open-work-relay",
+  "cd open-work-relay",
+  "npm install -g .",
+  'relay init "Client Ops Relay"',
+].join("\n");
+
 const sevenParts = [
   "Outcome",
   "Owner / next actor",
@@ -68,14 +76,15 @@ const guides = [
       <div class="terminal">
         <div class="terminal-bar">
           <span></span><span></span><span></span>
-          <span class="label">relay</span>
+          <span class="label">install</span>
         </div>
-        <pre><code><span class="c-comment"># two short commands, no flags</span>
+        <pre data-copy={installCmds}><code><span class="c-comment"># install the kit from GitHub, then start a relay</span>
+<span class="c-prompt">$</span> <span class="c-cmd">git clone https://github.com/The-Little-AI-Company/open-work-relay</span>
+<span class="c-prompt">$</span> <span class="c-cmd">cd open-work-relay</span>
+<span class="c-prompt">$</span> <span class="c-cmd">npm install -g .</span>
 <span class="c-prompt">$</span> <span class="c-cmd">relay init "Client Ops Relay"</span>
 <span class="c-out">Created relay workspace: Client Ops Relay</span>
-<span class="c-out">Next: relay dashboard</span>
-<span class="c-prompt">$</span> <span class="c-cmd">relay dashboard</span>
-<span class="c-out">Agent Relay dashboard: http://127.0.0.1:8787/</span></code></pre>
+<span class="c-out">Next: relay dashboard</span></code></pre>
       </div>
     </div>
   </section>
